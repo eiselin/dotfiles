@@ -16,6 +16,7 @@ vim.opt.mouse = "a"              -- Enable mouse support
 vim.opt.tabstop = 2              -- 2 spaces for tabs
 vim.opt.shiftwidth = 2           -- 2 spaces for indentation
 vim.opt.expandtab = true         -- Use spaces instead of tabs
+vim.opt.completeopt = "menu,menuone,noselect" -- Completion options
 
 -- Set leader key to space
 vim.g.mapleader = " "
@@ -39,11 +40,11 @@ vim.opt.rtp:prepend(lazypath)
 require("lazy").setup({
   -- Colorscheme
   {
-    "folke/tokyonight.nvim",
+    "catppuccin/nvim",
     lazy = false,
     priority = 1000,
     config = function()
-      vim.cmd([[colorscheme tokyonight-night]])
+      vim.cmd([[colorscheme catppuccin-latte]])
     end,
   },
   
@@ -97,6 +98,54 @@ require("lazy").setup({
             prompt_position = "top",
           },
           sorting_strategy = "ascending",
+        },
+      })
+    end,
+  },
+  
+  -- Completion plugins
+  {
+    "hrsh7th/nvim-cmp",
+    dependencies = {
+      "hrsh7th/cmp-buffer", -- Source for buffer words
+    },
+    config = function()
+      local cmp = require("cmp")
+      
+      cmp.setup({
+        mapping = cmp.mapping.preset.insert({
+          ["<C-Space>"] = cmp.mapping.complete(),
+          ["<C-e>"] = cmp.mapping.abort(),
+          ["<CR>"] = cmp.mapping.confirm({ select = false }),
+          ["<C-j>"] = cmp.mapping(function(fallback)
+            if cmp.visible() then
+              cmp.select_next_item()
+            else
+              fallback()
+            end
+          end, { "i", "s" }),
+          ["<C-k>"] = cmp.mapping(function(fallback)
+            if cmp.visible() then
+              cmp.select_prev_item()
+            else
+              fallback()
+            end
+          end, { "i", "s" }),
+        }),
+        sources = cmp.config.sources({
+          -- Only use buffer source for completion (current file only)
+          { name = "buffer", option = { keyword_length = 2 } },
+        }),
+        window = {
+          completion = cmp.config.window.bordered(),
+          documentation = cmp.config.window.bordered(),
+        },
+        formatting = {
+          format = function(entry, vim_item)
+            -- Add source indication
+            vim_item.menu = "[" .. entry.source.name .. "]"
+            return vim_item
+          end,
         },
       })
     end,
