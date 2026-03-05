@@ -19,11 +19,26 @@ mkdir -p "$DOTFILES_DIR/nvim"
 cp "$NVIM_DIR/init.lua" "$DOTFILES_DIR/nvim/"
 [ -f "$NVIM_DIR/lazy-lock.json" ] && cp "$NVIM_DIR/lazy-lock.json" "$DOTFILES_DIR/nvim/"
 
-# --- alacritty (config only, themes are installed separately) ---
+# --- alacritty (config + active colorscheme) ---
 echo "  alacritty"
 rm -rf "$DOTFILES_DIR/alacritty"
 mkdir -p "$DOTFILES_DIR/alacritty"
 cp "$ALACRITTY_DIR/alacritty.toml" "$DOTFILES_DIR/alacritty/"
+
+# Copy the active colorscheme and rewrite the import path
+THEME_PATH=$(sed -n 's/.*"\(~\/.config\/alacritty\/themes\/themes\/[^"]*\)".*/\1/p' "$ALACRITTY_DIR/alacritty.toml")
+if [ -n "$THEME_PATH" ]; then
+  THEME_FILE=$(basename "$THEME_PATH")
+  EXPANDED_PATH="${THEME_PATH/#\~/$HOME}"
+  if [ -f "$EXPANDED_PATH" ]; then
+    cp "$EXPANDED_PATH" "$DOTFILES_DIR/alacritty/$THEME_FILE"
+    # Rewrite import in the repo copy to use a relative path
+    sed -i '' "s|~/.config/alacritty/themes/themes/$THEME_FILE|~/.config/alacritty/$THEME_FILE|" "$DOTFILES_DIR/alacritty/alacritty.toml"
+    echo "    bundled colorscheme: $THEME_FILE"
+  else
+    echo "    WARNING: theme file not found: $EXPANDED_PATH"
+  fi
+fi
 
 # --- tmux ---
 echo "  tmux"
