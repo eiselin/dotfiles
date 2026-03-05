@@ -42,6 +42,13 @@ apply_alacritty() {
 apply_tmux() {
   echo "  tmux"
   cp "$DOTFILES_DIR/tmux/.tmux.conf" "$TMUX_CONF"
+  # Copy bundled theme files (if any)
+  for f in "$DOTFILES_DIR/tmux/"*.conf; do
+    [ -f "$f" ] || continue
+    mkdir -p "$HOME/.tmux"
+    cp "$f" "$HOME/.tmux/"
+    echo "    theme: $(basename "$f")"
+  done
 }
 
 apply_firefox() {
