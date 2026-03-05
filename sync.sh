@@ -40,9 +40,14 @@ if [ -n "$THEME_PATH" ]; then
   fi
 fi
 
-# --- tmux ---
+# --- tmux (config + theme files) ---
 echo "  tmux"
 cp "$TMUX_CONF" "$DOTFILES_DIR/tmux/.tmux.conf"
+for f in "$HOME/.tmux/"*.conf; do
+  [ -f "$f" ] || continue
+  cp "$f" "$DOTFILES_DIR/tmux/"
+  echo "    bundled theme: $(basename "$f")"
+done
 
 # --- firefox userChrome.css ---
 echo "  firefox userChrome.css"
