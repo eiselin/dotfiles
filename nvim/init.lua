@@ -34,28 +34,25 @@ require("lazy").setup({
 
   -- Colorscheme
   {
-    "catppuccin/nvim",
-    name = "catppuccin",
+    "folke/tokyonight.nvim",
     lazy = false,
     priority = 1000,
     config = function()
-      require("catppuccin").setup({
-        flavour = "latte",
-        transparent_background = true,
-        term_colors = true,
+      require("tokyonight").setup({
+        style = "day",
+        transparent = true,
+        terminal_colors = true,
         styles = {
-          comments = { "italic" },
-          keywords = { "italic" },
+          comments = { italic = true },
+          keywords = { italic = true },
           functions = {},
           variables = {},
         },
-        integrations = {
-          treesitter = true,
-          cmp = true,
-          telescope = { enabled = true },
-        },
       })
-      vim.cmd("colorscheme catppuccin-latte")
+      vim.cmd("colorscheme tokyonight-day")
+      vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
+      vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
+      vim.api.nvim_set_hl(0, "NormalNC", { bg = "none" })
     end,
   },
   -- Treesitter for syntax highlighting

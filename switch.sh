@@ -32,13 +32,15 @@ else
 fi
 echo "  macOS"
 
-# Alacritty — swap the imported color theme
+# Alacritty — swap the imported color theme and opacity
 ALACRITTY_CONFIG="$HOME/.config/alacritty/alacritty.toml"
 if [ -f "$ALACRITTY_CONFIG" ]; then
   if [ "$MODE" = "dark" ]; then
-    sed -i '' 's|github_light_default\.toml|github_dark_default.toml|g' "$ALACRITTY_CONFIG"
+    sed -i '' 's|tokyonight-day\.toml|tokyonight.toml|g' "$ALACRITTY_CONFIG"
+    sed -i '' 's/opacity = 0\.92/opacity = 0.88/' "$ALACRITTY_CONFIG"
   else
-    sed -i '' 's|github_dark_default\.toml|github_light_default.toml|g' "$ALACRITTY_CONFIG"
+    sed -i '' 's|tokyonight\.toml|tokyonight-day.toml|g' "$ALACRITTY_CONFIG"
+    sed -i '' 's/opacity = 0\.88/opacity = 0.92/' "$ALACRITTY_CONFIG"
   fi
   echo "  alacritty"
 fi
@@ -57,17 +59,28 @@ if [ -f "$TMUX_CONF" ]; then
   echo "  tmux"
 fi
 
-# Neovim — swap catppuccin flavour (latte=light, mocha=dark)
+# Neovim — swap tokyonight style (day=light, night=dark)
 NVIM_CONFIG="$HOME/.config/nvim/init.lua"
 if [ -f "$NVIM_CONFIG" ]; then
   if [ "$MODE" = "dark" ]; then
-    sed -i '' 's/flavour = "latte"/flavour = "mocha"/' "$NVIM_CONFIG"
-    sed -i '' 's/colorscheme catppuccin-latte/colorscheme catppuccin-mocha/' "$NVIM_CONFIG"
+    sed -i '' 's/style = "day"/style = "night"/' "$NVIM_CONFIG"
+    sed -i '' 's/colorscheme tokyonight-day/colorscheme tokyonight-night/' "$NVIM_CONFIG"
   else
-    sed -i '' 's/flavour = "mocha"/flavour = "latte"/' "$NVIM_CONFIG"
-    sed -i '' 's/colorscheme catppuccin-mocha/colorscheme catppuccin-latte/' "$NVIM_CONFIG"
+    sed -i '' 's/style = "night"/style = "day"/' "$NVIM_CONFIG"
+    sed -i '' 's/colorscheme tokyonight-night/colorscheme tokyonight-day/' "$NVIM_CONFIG"
   fi
   echo "  nvim (restart nvim to apply)"
+fi
+
+# Claude Code theme
+CLAUDE_SETTINGS="$HOME/.claude/settings.json"
+if [ -f "$CLAUDE_SETTINGS" ]; then
+  if [ "$MODE" = "dark" ]; then
+    python3 -c "import json; s=json.load(open('$CLAUDE_SETTINGS')); s['theme']='dark'; json.dump(s, open('$CLAUDE_SETTINGS','w'), indent=2); open('$CLAUDE_SETTINGS','a').write('\n')"
+  else
+    python3 -c "import json; s=json.load(open('$CLAUDE_SETTINGS')); s['theme']='light'; json.dump(s, open('$CLAUDE_SETTINGS','w'), indent=2); open('$CLAUDE_SETTINGS','a').write('\n')"
+  fi
+  echo "  claude code"
 fi
 
 echo "Done. Mode: $MODE"
