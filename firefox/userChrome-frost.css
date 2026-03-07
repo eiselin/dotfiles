@@ -1,0 +1,233 @@
+/* ============================================================
+   Firefox UI — Frosted Glass / Blur / Transparency
+   Default layout preserved; only visual appearance is changed.
+   ============================================================
+
+   SETUP: Rename this file to userChrome.css and place it at:
+     macOS:   ~/Library/Application Support/Firefox/Profiles/<profile>/chrome/userChrome.css
+     Linux:   ~/.mozilla/firefox/<profile>/chrome/userChrome.css
+     Windows: %APPDATA%\Mozilla\Firefox\Profiles\<profile>\chrome\userChrome.css
+
+   REQUIRED about:config changes (type about:config in the address bar):
+
+   1. toolkit.legacyUserProfileCustomizations.stylesheets = true
+      (ALL platforms — enables userChrome.css loading)
+
+   2. widget.macos.titlebar-blend-mode.behind-window = true
+      (macOS ONLY — activates native vibrancy so the OS blurs the
+       desktop/wallpaper behind the window. Without this pref the
+       window background stays opaque even with transparent CSS.)
+
+   OPTIONAL about:config changes for better blur performance:
+
+   3. gfx.webrender.all = true
+      (Forces WebRender on hardware that Firefox left on the legacy
+       compositor. WebRender is required for backdrop-filter blur.
+       Modern Firefox enables it automatically on most systems.)
+
+   4. layers.acceleration.force-enabled = true
+      (Forces GPU compositing. Helps on older hardware where
+       backdrop-filter may be ignored or slow without it.)
+
+   Restart Firefox after changing any about:config pref.
+   ============================================================ */
+
+
+/* ============================================================
+   Variables
+   ============================================================ */
+
+:root {
+  --glass-blur: 8px;
+  --glass-saturate: 1.6;
+  --glass-backdrop: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+
+  /* Override Firefox's internal theme variables so they don't paint
+     opaque backgrounds over our transparent/frosted elements.
+     These are set by the default theme via the LWT (Lightweight Theme)
+     system and will win over a plain background: rule without this. */
+  --toolbar-bgcolor: transparent !important;
+  --toolbar-color: inherit !important;
+  --lwt-accent-color: transparent !important;
+  --lwt-text-color: inherit !important;
+  --tab-selected-bgcolor: transparent !important;
+  --tabs-navbar-shadow-size: 0px !important;
+  --toolbox-border-bottom-color: transparent !important;
+}
+
+/* Light mode glass tints */
+@media (prefers-color-scheme: light) {
+  :root {
+    --glass-toolbar-bg: rgba(255, 255, 255, 0.01);
+    --glass-tab-bg:     rgba(255, 255, 255, 0.01);
+    --glass-sidebar-bg: rgba(255, 255, 255, 0.02);
+    --glass-panel-bg:   rgba(255, 255, 255, 0.10);
+  }
+}
+
+/* Dark mode glass tints */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --glass-toolbar-bg: rgba(20, 20, 20, 0.01);
+    --glass-tab-bg:     rgba(20, 20, 20, 0.01);
+    --glass-sidebar-bg: rgba(20, 20, 20, 0.02);
+    --glass-panel-bg:   rgba(20, 20, 20, 0.10);
+  }
+}
+
+
+/* ============================================================
+   Window Base
+   ============================================================
+   Transparent so the macOS vibrancy layer (or desktop) shows
+   through. The appearance property extends the vibrancy region
+   from the titlebar across the full window chrome.
+   Requires: widget.macos.titlebar-blend-mode.behind-window = true
+   ============================================================ */
+
+#main-window,
+#main-window:-moz-window-inactive {
+  background: transparent !important;
+  appearance: -moz-sidebar !important;  /* macOS: extends vibrancy across the full window */
+}
+
+/* Intermediate containers must be transparent so the vibrancy material
+   (OS-level blur of the desktop) shows through to the toolbar elements
+   where backdrop-filter is applied. Every layer in the stack between
+   #main-window and the toolbar elements must be transparent, or
+   backdrop-filter will only blur an opaque surface and do nothing visible. */
+#fullscreen-and-pointerlock-wrapper,
+#browser-panel,
+#titlebar,                /* macOS: wraps the tab bar in the titlebar region */
+#navigator-toolbox,       /* wraps ALL toolbars — must be clear for blur to reach #nav-bar */
+#appcontent,
+#tabbrowser-tabbox,
+#tabbrowser-tabpanels,
+#browser,
+.browserContainer,
+.deck-selected {
+  background: transparent !important;
+}
+
+
+/* ============================================================
+   Toolbar Region (tab bar + nav bar + bookmarks bar)
+   ============================================================
+   backdrop-filter is applied to #navigator-toolbox as a whole
+   rather than individual toolbar elements — blur on XUL toolbar
+   children (#nav-bar, #TabsToolbar) is unreliable in chrome context.
+   Individual toolbars get a semi-transparent tint so they remain
+   visually distinct from each other.
+   ============================================================ */
+
+/* Frosted glass on the entire toolbar block.
+   appearance: none strips the native macOS toolbar surface that Firefox
+   draws via the OS widget layer — without this, the OS paints an opaque
+   toolbar background that background: transparent cannot override. */
+#navigator-toolbox {
+  appearance: none !important;
+  background: var(--glass-toolbar-bg) !important;
+  backdrop-filter: var(--glass-backdrop) !important;
+  -webkit-backdrop-filter: var(--glass-backdrop) !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+/* Tab bar — lives inside #titlebar on macOS which gets native treatment;
+   strip appearance on both to allow the glass tint through */
+#titlebar,
+#TabsToolbar {
+  appearance: none !important;
+  background: var(--glass-tab-bg) !important;
+  border-bottom: none !important;
+  box-shadow: none !important;
+}
+
+/* Nav bar and bookmarks bar */
+#nav-bar,
+#PersonalToolbar {
+  appearance: none !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* Active tab — slightly opaque pill to distinguish from background tabs */
+.tabbrowser-tab[selected] .tab-background {
+  background: rgba(255, 255, 255, 0.45) !important;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.18) !important;
+  border-radius: 6px !important;
+}
+
+@media (prefers-color-scheme: dark) {
+  .tabbrowser-tab[selected] .tab-background {
+    background: rgba(255, 255, 255, 0.30) !important;
+  }
+}
+
+
+/* ============================================================
+   Content Area Card
+   ============================================================ */
+
+.browserSidebarContainer {
+  border-radius: 10px !important;
+  overflow: clip !important;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.55) !important;
+  margin: 9px !important;
+  border: none !important;
+}
+
+.browserStack,
+#browsing-context-stack {
+  border-radius: 10px !important;
+  overflow: clip !important;
+  border: none !important;
+}
+
+browser[type="content"] {
+  border-radius: 10px !important;
+  border: none !important;
+}
+
+
+/* ============================================================
+   Sidebar (bookmarks, history, vertical tabs)
+   ============================================================ */
+
+#sidebar-main,
+#sidebar-box,
+#sidebar {
+  background: var(--glass-sidebar-bg) !important;
+  backdrop-filter: var(--glass-backdrop) !important;
+  -webkit-backdrop-filter: var(--glass-backdrop) !important;
+  border: none !important;
+  box-shadow: none !important;
+  /* Suppress Firefox's own sidebar background variables so they
+     don't paint over the transparent/frosted background */
+  --sidebar-background-color: transparent !important;
+  --lwt-sidebar-background-color: transparent !important;
+  --sidebar-border-color: transparent !important;
+}
+
+/* Sidebar panel content — transparent so glass tint shows through */
+#sidebar-box .sidebar-panel,
+#sidebar-box .sidebar-panel > * {
+  background: transparent !important;
+}
+
+
+/* ============================================================
+   Popups and Panels (extension popups, menus, etc.)
+   ============================================================ */
+
+panel[type="arrow"] .panel-arrowcontent,
+panel[type="arrow"] panelmultiview,
+panel[type="arrow"] panelview,
+menupopup {
+  background: var(--glass-panel-bg) !important;
+  backdrop-filter: var(--glass-backdrop) !important;
+  -webkit-backdrop-filter: var(--glass-backdrop) !important;
+  border-radius: 10px !important;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.18) !important;
+}
