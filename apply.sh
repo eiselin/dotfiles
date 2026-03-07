@@ -30,13 +30,11 @@ apply_nvim() {
 apply_alacritty() {
   echo "  alacritty"
   mkdir -p "$ALACRITTY_DIR"
-  cp "$DOTFILES_DIR/alacritty/alacritty.toml" "$ALACRITTY_DIR/"
-  # Copy bundled colorscheme file (if any)
-  THEME_FILE=$(sed -n 's/.*"\(~\/.config\/alacritty\/[^/]*\.toml\)".*/\1/p' "$DOTFILES_DIR/alacritty/alacritty.toml" | xargs basename 2>/dev/null || true)
-  if [ -n "$THEME_FILE" ] && [ -f "$DOTFILES_DIR/alacritty/$THEME_FILE" ]; then
-    cp "$DOTFILES_DIR/alacritty/$THEME_FILE" "$ALACRITTY_DIR/"
-    echo "    colorscheme: $THEME_FILE"
-  fi
+  for f in "$DOTFILES_DIR/alacritty/"*.toml; do
+    [ -f "$f" ] || continue
+    cp "$f" "$ALACRITTY_DIR/"
+    echo "    copied: $(basename "$f")"
+  done
 }
 
 apply_tmux() {
