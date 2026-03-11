@@ -39,7 +39,7 @@ require("lazy").setup({
     priority = 1000,
     config = function()
       require("tokyonight").setup({
-        style = "day",
+        style = "night",
         transparent = true,
         terminal_colors = true,
         styles = {
@@ -49,7 +49,7 @@ require("lazy").setup({
           variables = {},
         },
       })
-      vim.cmd("colorscheme tokyonight-day")
+      vim.cmd("colorscheme tokyonight-night")
       vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
       vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
       vim.api.nvim_set_hl(0, "NormalNC", { bg = "none" })
@@ -102,6 +102,46 @@ require("lazy").setup({
             prompt_position = "top",
           },
           sorting_strategy = "ascending",
+        },
+      })
+    end,
+  },
+
+  -- File explorer
+  {
+    "nvim-neo-tree/neo-tree.nvim",
+    branch = "v3.x",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "nvim-tree/nvim-web-devicons",
+      "MunifTanjim/nui.nvim",
+    },
+    keys = {
+      { "<leader>e", "<cmd>Neotree toggle<cr>", desc = "Toggle file explorer" },
+      { "<leader>o", "<cmd>Neotree focus<cr>", desc = "Focus file explorer" },
+    },
+    config = function()
+      vim.api.nvim_set_hl(0, "NeoTreeNormal", { bg = "none" })
+      vim.api.nvim_set_hl(0, "NeoTreeNormalNC", { bg = "none" })
+      vim.api.nvim_set_hl(0, "NeoTreeEndOfBuffer", { bg = "none" })
+      require("neo-tree").setup({
+        close_if_last_window = true,
+        window = {
+          width = 30,
+          mappings = {
+            ["<space>"] = "none", -- don't conflict with leader
+            ["l"] = "open",
+            ["h"] = "close_node",
+            ["v"] = "open_vsplit",
+            ["s"] = "open_split",
+          },
+        },
+        filesystem = {
+          follow_current_file = { enabled = true },
+          hide_dotfiles = false,
+          filtered_items = {
+            hide_gitignored = false,
+          },
         },
       })
     end,
@@ -201,3 +241,14 @@ vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv", { noremap = true, silent = true })
 -- Keep cursor centered when scrolling
 vim.keymap.set("n", "<C-d>", "<C-d>zz", { noremap = true, silent = true })
 vim.keymap.set("n", "<C-u>", "<C-u>zz", { noremap = true, silent = true })
+
+vim.api.nvim_create_autocmd("ColorScheme", {
+  pattern = "*",
+  callback = function()
+    vim.api.nvim_set_hl(0, "CursorLine", { bg = "#292e42" })
+    vim.api.nvim_set_hl(0, "EndOfBuffer", { fg = "#3b4261" })
+    vim.api.nvim_set_hl(0, "StatusLine", { bg = "#1e2030", fg = "#a9b1d6" })
+    vim.api.nvim_set_hl(0, "StatusLineNC", { bg = "#1e2030", fg = "#565f89" })
+    vim.api.nvim_set_hl(0, "@markup.raw.markdown_inline", { fg = "#7dcfff" })
+  end,
+})
