@@ -147,6 +147,24 @@ require("lazy").setup({
     end,
   },
 
+  -- Lazygit
+  {
+    "kdheepak/lazygit.nvim",
+    cmd = {
+      "LazyGit",
+      "LazyGitConfig",
+      "LazyGitCurrentFile",
+      "LazyGitFilter",
+      "LazyGitFilterCurrentFile",
+    },
+    dependencies = { "nvim-lua/plenary.nvim" },
+    keys = {
+      { "<leader>gg", "<cmd>LazyGit<cr>", desc = "LazyGit" },
+      { "<leader>gf", "<cmd>LazyGitFilterCurrentFile<cr>", desc = "LazyGit current file history" },
+      { "<leader>gl", "<cmd>LazyGitFilter<cr>", desc = "LazyGit filter" },
+    },
+  },
+
   -- Completion
   {
     "hrsh7th/nvim-cmp",

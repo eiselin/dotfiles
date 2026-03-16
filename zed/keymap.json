@@ -1,0 +1,68 @@
+// Zed keymap
+//
+// For information on binding keys, see the Zed
+// documentation: https://zed.dev/docs/key-bindings
+//
+// To see the default key bindings run `zed: open default keymap`
+// from the command palette.
+[
+  {
+    "context": "Workspace",
+    "bindings": {
+      // "shift shift": "file_finder::Toggle"
+    },
+  },
+  {
+    "context": "Editor && vim_mode == insert",
+    "bindings": {
+      // "j k": "vim::NormalBefore"
+    },
+  },
+  {
+    "bindings": {
+      "alt-=": "workspace::ZoomIn"
+    }
+  },
+  {
+    "bindings": {
+      "alt--": "workspace::ZoomOut"
+    }
+  },
+  {
+    "bindings": {
+      "alt-t": "terminal_panel::ToggleFocus"
+    }
+  },
+  {
+    "context": "Workspace",
+    "bindings": {
+      "alt-`": "terminal_panel::Toggle"
+    }
+  },
+  {
+    "bindings": {
+      "alt-cmd-y": "workspace::ToggleAllDocks"
+    }
+  },
+  // tmux-style pane management with ctrl-a leader
+  {
+    "context": "Workspace",
+    "bindings": {
+      // Split panes
+      "ctrl-a |": "pane::SplitRight",
+      "ctrl-a -": "pane::SplitDown",
+      // Navigate panes
+      "ctrl-a h": "workspace::ActivatePaneLeft",
+      "ctrl-a l": "workspace::ActivatePaneRight",
+      "ctrl-a k": "workspace::ActivatePaneUp",
+      "ctrl-a j": "workspace::ActivatePaneDown",
+      // Zoom / close
+      "ctrl-a z": "workspace::ToggleZoom",
+      "ctrl-a x": "pane::CloseActiveItem",
+      // Tabs (like tmux windows)
+      "ctrl-a c": "workspace::NewFile",
+      "ctrl-a n": "pane::ActivateNextItem",
+      "ctrl-a p": "pane::ActivatePreviousItem"
+    }
+  }
+]

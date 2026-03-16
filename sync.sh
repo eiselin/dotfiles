@@ -7,6 +7,7 @@ DOTFILES_DIR="$(cd "$(dirname "$0")" && pwd)"
 NVIM_DIR="$HOME/.config/nvim"
 ALACRITTY_DIR="$HOME/.config/alacritty"
 TMUX_CONF="$HOME/.tmux.conf"
+ZED_DIR="$HOME/.config/zed"
 # Firefox profile with userChrome.css
 FIREFOX_CHROME_DIR="$HOME/Library/Application Support/Firefox/Profiles/8hvurr5f.default-release-1717767901382/chrome"
 
@@ -48,6 +49,13 @@ for f in "$HOME/.tmux/"*.conf; do
   cp "$f" "$DOTFILES_DIR/tmux/"
   echo "    bundled theme: $(basename "$f")"
 done
+
+# --- zed ---
+echo "  zed"
+rm -rf "$DOTFILES_DIR/zed"
+mkdir -p "$DOTFILES_DIR/zed"
+[ -f "$ZED_DIR/settings.json" ] && cp "$ZED_DIR/settings.json" "$DOTFILES_DIR/zed/"
+[ -f "$ZED_DIR/keymap.json" ] && cp "$ZED_DIR/keymap.json" "$DOTFILES_DIR/zed/"
 
 # --- firefox userChrome.css ---
 echo "  firefox userChrome.css"

@@ -7,12 +7,13 @@ DOTFILES_DIR="$(cd "$(dirname "$0")" && pwd)"
 NVIM_DIR="$HOME/.config/nvim"
 ALACRITTY_DIR="$HOME/.config/alacritty"
 TMUX_CONF="$HOME/.tmux.conf"
+ZED_DIR="$HOME/.config/zed"
 FIREFOX_CHROME_DIR="$HOME/Library/Application Support/Firefox/Profiles/8hvurr5f.default-release-1717767901382/chrome"
 
 usage() {
   echo "Usage: $0 [app ...] | all"
   echo ""
-  echo "Apps: nvim, alacritty, tmux, firefox"
+  echo "Apps: nvim, alacritty, tmux, zed, firefox"
   echo ""
   echo "Examples:"
   echo "  $0 all"
@@ -49,6 +50,13 @@ apply_tmux() {
   done
 }
 
+apply_zed() {
+  echo "  zed"
+  mkdir -p "$ZED_DIR"
+  [ -f "$DOTFILES_DIR/zed/settings.json" ] && cp "$DOTFILES_DIR/zed/settings.json" "$ZED_DIR/"
+  [ -f "$DOTFILES_DIR/zed/keymap.json" ] && cp "$DOTFILES_DIR/zed/keymap.json" "$ZED_DIR/"
+}
+
 apply_firefox() {
   echo "  firefox"
   mkdir -p "$FIREFOX_CHROME_DIR"
@@ -67,11 +75,13 @@ for arg in "$@"; do
       apply_nvim
       apply_alacritty
       apply_tmux
+      apply_zed
       apply_firefox
       ;;
     nvim)       apply_nvim ;;
     alacritty)  apply_alacritty ;;
     tmux)       apply_tmux ;;
+    zed)        apply_zed ;;
     firefox)    apply_firefox ;;
     *)
       echo "Unknown app: $arg"
