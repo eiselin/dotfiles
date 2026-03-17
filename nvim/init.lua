@@ -34,22 +34,21 @@ require("lazy").setup({
 
   -- Colorscheme
   {
-    "folke/tokyonight.nvim",
+    "catppuccin/nvim",
+    name = "catppuccin",
     lazy = false,
     priority = 1000,
     config = function()
-      require("tokyonight").setup({
-        style = "night",
-        transparent = true,
-        terminal_colors = true,
+      require("catppuccin").setup({
+        flavour = "latte",
+        transparent_background = true,
+        term_colors = true,
         styles = {
-          comments = { italic = true },
-          keywords = { italic = true },
-          functions = {},
-          variables = {},
+          comments = { "italic" },
+          keywords = { "italic" },
         },
       })
-      vim.cmd("colorscheme tokyonight-night")
+      vim.cmd("colorscheme catppuccin-latte")
       vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
       vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
       vim.api.nvim_set_hl(0, "NormalNC", { bg = "none" })
@@ -263,10 +262,10 @@ vim.keymap.set("n", "<C-u>", "<C-u>zz", { noremap = true, silent = true })
 vim.api.nvim_create_autocmd("ColorScheme", {
   pattern = "*",
   callback = function()
-    vim.api.nvim_set_hl(0, "CursorLine", { bg = "#292e42" })
-    vim.api.nvim_set_hl(0, "EndOfBuffer", { fg = "#3b4261" })
-    vim.api.nvim_set_hl(0, "StatusLine", { bg = "#1e2030", fg = "#a9b1d6" })
-    vim.api.nvim_set_hl(0, "StatusLineNC", { bg = "#1e2030", fg = "#565f89" })
-    vim.api.nvim_set_hl(0, "@markup.raw.markdown_inline", { fg = "#7dcfff" })
+    vim.api.nvim_set_hl(0, "CursorLine", { bg = "#e6e9ef" })
+    vim.api.nvim_set_hl(0, "EndOfBuffer", { fg = "#ccd0da" })
+    vim.api.nvim_set_hl(0, "StatusLine", { bg = "#dce0e8", fg = "#4c4f69" })
+    vim.api.nvim_set_hl(0, "StatusLineNC", { bg = "#dce0e8", fg = "#8c8fa1" })
+    vim.api.nvim_set_hl(0, "@markup.raw.markdown_inline", { fg = "#04a5e5" })
   end,
 })
