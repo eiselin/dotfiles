@@ -1,5 +1,5 @@
 general.import = [
-    "~/.config/alacritty/tokyonight.toml"
+    "~/.config/alacritty/tokyonight-day.toml"
 ]
 
 [env]
@@ -12,7 +12,7 @@ dimensions = { columns = 175, lines = 50 }
 
 decorations = "Buttonless"
 
-opacity = 0.88
+opacity = 0.92
 blur = true
 
 option_as_alt = "Both"
