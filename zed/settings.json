@@ -7,6 +7,8 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
+  "base_keymap": "VSCode",
+  "zoomed_padding": true,
   "agent_buffer_font_size": 15.0,
   "agent": {
     "default_model": {
@@ -19,9 +21,9 @@
   },
   "soft_wrap": "editor_width",
   "vim": {
-    "toggle_relative_line_numbers": true
+    "toggle_relative_line_numbers": false
   },
-  "vim_mode": true,
+  "vim_mode": false,
   "git_panel": {
     "tree_view": true
   },
@@ -44,8 +46,8 @@
     "show": false
   },
   "theme": {
-    "mode": "system",
-    "light": "Solarized Light",
-    "dark": "Catppuccin Espresso (Blur)",
+    "mode": "dark",
+    "light": "One Light",
+    "dark": "One Dark",
   },
 }

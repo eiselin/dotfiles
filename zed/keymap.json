@@ -30,13 +30,7 @@
   },
   {
     "bindings": {
-      "alt-t": "terminal_panel::ToggleFocus"
-    }
-  },
-  {
-    "context": "Workspace",
-    "bindings": {
-      "alt-`": "terminal_panel::Toggle"
+      "cmd-shift-t": "terminal_panel::ToggleFocus"
     }
   },
   {
@@ -63,6 +57,47 @@
       "ctrl-a c": "workspace::NewFile",
       "ctrl-a n": "pane::ActivateNextItem",
       "ctrl-a p": "pane::ActivatePreviousItem"
+    }
+  },
+  {
+    "bindings": {
+      "cmd-e": "editor::ToggleFocus"
+    }
+  },
+  {
+    "context": "KeymapEditor",
+    "bindings": {
+      "cmd-e": null
+    }
+  },
+  {
+    "context": "(Editor && mode == full)",
+    "bindings": {
+      "cmd-e": null
+    }
+  },
+  {
+    "context": "SettingsWindow",
+    "bindings": {
+      "cmd-e": "settings_editor::ToggleFocusNav"
+    }
+  },
+  {
+    "context": "SettingsWindow",
+    "bindings": {
+      "cmd-shift-e": null
+    }
+  },
+  {
+    "context": "Pane",
+    "bindings": {
+      "ctrl-=": "pane::GoForward"
+    }
+  },
+  {
+    "context": "Workspace",
+    "bindings": {
+      "cmd-shift-g": "git_panel::ToggleFocus"
     }
   }
 ]
