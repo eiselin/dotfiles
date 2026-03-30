@@ -1,5 +1,5 @@
 general.import = [
-    "~/.config/alacritty/tokyonight-day.toml"
+    "~/.config/alacritty/gruvbox_material_hard_dark.toml"
 ]
 
 [env]

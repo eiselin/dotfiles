@@ -34,24 +34,20 @@ require("lazy").setup({
 
   -- Colorscheme
   {
-    "catppuccin/nvim",
-    name = "catppuccin",
+    "ellisonleao/gruvbox.nvim",
     lazy = false,
     priority = 1000,
     config = function()
-      require("catppuccin").setup({
-        flavour = "latte",
-        transparent_background = true,
-        term_colors = true,
+      require("gruvbox").setup({
+        contrast = "hard",
+        transparent_mode = true,
         styles = {
-          comments = { "italic" },
-          keywords = { "italic" },
+          comments = { italic = true },
+          keywords = { italic = true },
         },
       })
-      vim.cmd("colorscheme catppuccin-latte")
-      vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
-      vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
-      vim.api.nvim_set_hl(0, "NormalNC", { bg = "none" })
+      vim.o.background = "dark"
+      vim.cmd("colorscheme gruvbox")
     end,
   },
   -- Treesitter for syntax highlighting
@@ -259,13 +255,3 @@ vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv", { noremap = true, silent = true })
 vim.keymap.set("n", "<C-d>", "<C-d>zz", { noremap = true, silent = true })
 vim.keymap.set("n", "<C-u>", "<C-u>zz", { noremap = true, silent = true })
 
-vim.api.nvim_create_autocmd("ColorScheme", {
-  pattern = "*",
-  callback = function()
-    vim.api.nvim_set_hl(0, "CursorLine", { bg = "#e6e9ef" })
-    vim.api.nvim_set_hl(0, "EndOfBuffer", { fg = "#ccd0da" })
-    vim.api.nvim_set_hl(0, "StatusLine", { bg = "#dce0e8", fg = "#4c4f69" })
-    vim.api.nvim_set_hl(0, "StatusLineNC", { bg = "#dce0e8", fg = "#8c8fa1" })
-    vim.api.nvim_set_hl(0, "@markup.raw.markdown_inline", { fg = "#04a5e5" })
-  end,
-})
