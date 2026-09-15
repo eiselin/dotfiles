@@ -39,6 +39,22 @@ require("lazy").setup({
     lazy = false,
     priority = 1000,
     config = function()
+      -- Follow Ghostty's background-opacity: when the terminal window is
+      -- translucent, let Flexoki keep nvim backgrounds transparent too.
+      local ghostty_config = vim.fn.expand("~/.config/ghostty/config")
+      local ghostty_opacity = 1
+      if vim.fn.filereadable(ghostty_config) == 1 then
+        for _, line in ipairs(vim.fn.readfile(ghostty_config)) do
+          local value = line:match("^%s*background%-opacity%s*=%s*([%d%.]+)%s*$")
+          if value then
+            ghostty_opacity = tonumber(value) or ghostty_opacity
+          end
+        end
+      end
+
+      require("flexoki").setup({
+        styles = { transparency = ghostty_opacity < 1 },
+      })
       -- Default until auto-dark-mode applies the system setting
       vim.cmd("colorscheme flexoki-moon")
     end,
