@@ -32,23 +32,32 @@ vim.opt.rtp:prepend(lazypath)
 -- Plugins
 require("lazy").setup({
 
-  -- Colorscheme
+  -- Colorscheme (Flexoki, follows system dark/light setting)
   {
-    "ellisonleao/gruvbox.nvim",
+    "kepano/flexoki-neovim",
+    name = "flexoki",
     lazy = false,
     priority = 1000,
     config = function()
-      require("gruvbox").setup({
-        contrast = "hard",
-        transparent_mode = true,
-        styles = {
-          comments = { italic = true },
-          keywords = { italic = true },
-        },
-      })
-      vim.o.background = "dark"
-      vim.cmd("colorscheme gruvbox")
+      -- Default until auto-dark-mode applies the system setting
+      vim.cmd("colorscheme flexoki-moon")
     end,
+  },
+  {
+    "f-person/auto-dark-mode.nvim",
+    lazy = false,
+    priority = 999,
+    opts = {
+      update_interval = 3000,
+      set_dark_mode = function()
+        vim.opt.background = "dark"
+        vim.cmd("colorscheme flexoki-moon")
+      end,
+      set_light_mode = function()
+        vim.opt.background = "light"
+        vim.cmd("colorscheme flexoki-dawn")
+      end,
+    },
   },
   -- Treesitter for syntax highlighting
   {
