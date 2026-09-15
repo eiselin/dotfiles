@@ -8,6 +8,8 @@ NVIM_DIR="$HOME/.config/nvim"
 ALACRITTY_DIR="$HOME/.config/alacritty"
 TMUX_CONF="$HOME/.tmux.conf"
 ZED_DIR="$HOME/.config/zed"
+GHOSTTY_DIR="$HOME/.config/ghostty"
+HERDR_DIR="$HOME/.config/herdr"
 # Firefox profile with userChrome.css
 FIREFOX_CHROME_DIR="$HOME/Library/Application Support/Firefox/Profiles/8hvurr5f.default-release-1717767901382/chrome"
 
@@ -56,6 +58,18 @@ rm -rf "$DOTFILES_DIR/zed"
 mkdir -p "$DOTFILES_DIR/zed"
 [ -f "$ZED_DIR/settings.json" ] && cp "$ZED_DIR/settings.json" "$DOTFILES_DIR/zed/"
 [ -f "$ZED_DIR/keymap.json" ] && cp "$ZED_DIR/keymap.json" "$DOTFILES_DIR/zed/"
+
+# --- ghostty (config only, follows macOS light/dark via theme = light:...,dark:...) ---
+echo "  ghostty"
+rm -rf "$DOTFILES_DIR/ghostty"
+mkdir -p "$DOTFILES_DIR/ghostty"
+[ -f "$GHOSTTY_DIR/config" ] && cp "$GHOSTTY_DIR/config" "$DOTFILES_DIR/ghostty/config"
+
+# --- herdr (config.toml only; skip logs, sockets, session state) ---
+echo "  herdr"
+rm -rf "$DOTFILES_DIR/herdr"
+mkdir -p "$DOTFILES_DIR/herdr"
+[ -f "$HERDR_DIR/config.toml" ] && cp "$HERDR_DIR/config.toml" "$DOTFILES_DIR/herdr/config.toml"
 
 # --- firefox userChrome.css ---
 echo "  firefox userChrome.css"

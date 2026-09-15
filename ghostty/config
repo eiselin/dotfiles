@@ -1,0 +1,3 @@
+# Volgt de macOS light/dark-stand automatisch.
+# Past bij het Flexoki-palet in ~/.config/herdr/config.toml.
+theme = light:Flexoki Light,dark:Flexoki Dark

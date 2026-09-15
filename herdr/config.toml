@@ -1,0 +1,55 @@
+onboarding = false
+
+# Flexoki (stephango.com/flexoki) als custom palet bovenop de auto-switch.
+# Let op: overlay0/overlay1/subtext0 zijn bij Herdr *tekst*-tokens (gedimde labels
+# in sidebar en tabbar), niet border-kleuren. Daarom volgen ze de luminantie van
+# catppuccin's rollen, niet Flexoki's ui/tx-namen.
+[theme]
+name = "catppuccin"
+auto_switch = true
+light_name = "catppuccin-latte"
+dark_name = "catppuccin"
+
+# Dark: bg = black, tekst = base-200, accenten = Flexoki 400
+[theme.custom.dark]
+panel_bg      = "reset"    # erft Ghostty-achtergrond incl. transparantie
+sidebar_bg    = "reset"    # idem, zodat de sidebar niet dekkend wordt
+surface_dim   = "reset"    # idem, geen dekkende strook in de tabbar
+surface0      = "#282726"  # base-900   - separators, scrollbar
+surface1      = "#343331"  # base-850
+active_row_bg = "#343331"  # base-850   - actieve Space / gefocuste Agent
+selection_bg  = "#403e3c"  # base-800   - Navigate-cursor
+overlay0      = "#878580"  # base-500   - dimste labels        (5.4:1)
+overlay1      = "#9f9d96"  # base-400                          (7.2:1)
+subtext0      = "#b7b5ac"  # base-300   - secundaire tekst     (9.4:1)
+text          = "#cecdc3"  # base-200   - primaire tekst      (11.9:1)
+accent        = "#403e3c"  # base-800  - actieve tab; label = fg #cecdc3, 6.7:1
+red           = "#d14d41"
+green         = "#879a39"
+yellow        = "#d0a215"
+blue          = "#4385be"
+teal          = "#3aa99f"  # cyan-400
+mauve         = "#8b7ec8"  # purple-400
+peach         = "#da702c"  # orange-400
+
+# Light: bg = paper, tekst = black, accenten = Flexoki 600
+[theme.custom.light]
+panel_bg      = "reset"    # erft Ghostty-achtergrond incl. transparantie
+sidebar_bg    = "reset"    # idem, zodat de sidebar niet dekkend wordt
+surface_dim   = "reset"    # idem, geen dekkende strook in de tabbar
+surface0      = "#dad8ce"  # base-150   - separators, scrollbar
+surface1      = "#cecdc3"  # base-200
+active_row_bg = "#dad8ce"  # base-150   - actieve Space / gefocuste Agent
+selection_bg  = "#cecdc3"  # base-200   - Navigate-cursor
+overlay0      = "#878580"  # base-500   - dimste labels        (3.4:1)
+overlay1      = "#6f6e69"  # base-600                          (4.9:1)
+subtext0      = "#575653"  # base-700   - secundaire tekst     (7.0:1)
+text          = "#100f0f"  # black      - primaire tekst
+accent        = "#b7b5ac"  # base-300  - actieve tab; label = fg #100f0f, 9.3:1
+red           = "#af3029"
+green         = "#66800b"
+yellow        = "#ad8301"
+blue          = "#205ea6"
+teal          = "#24837b"  # cyan-600
+mauve         = "#5e409d"  # purple-600
+peach         = "#bc5215"  # orange-600
