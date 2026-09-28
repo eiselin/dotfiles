@@ -1,7 +1,8 @@
-# Volgt de macOS light/dark-stand automatisch.
-# Past bij het Flexoki-palet in ~/.config/herdr/config.toml.
-theme = light:Flexoki Light,dark:Flexoki Dark
+theme = light:Catppuccin Latte,dark:Catppuccin Frappe
 
-# Doorzichtig venster. nvim leest deze waarde uit en maakt zijn eigen
-# achtergrond transparant zodra opacity < 1.
 background-opacity = 0.95
+background-blur = true
+
+font-family = "MesloLGLDZ Nerd Font"
+font-size = 15
+font-thicken = true

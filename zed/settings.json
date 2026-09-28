@@ -8,6 +8,27 @@
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
   "base_keymap": "VSCode",
+  "language_models": {
+    "openai_compatible": {
+      "fireworks": {
+        "api_url": "https://api.fireworks.ai/inference/v1",
+        "available_models": [
+          {
+            "name": "accounts/fireworks/models/glm-5p3-flash",
+            "display_name": "GLM 5.3 Flash (Fireworks)",
+            "max_tokens": 1040000,
+            "max_output_tokens": 32768,
+            "capabilities": {
+              "tools": true,
+              "images": false,
+              "parallel_tool_calls": false,
+              "prompt_cache_key": false
+            }
+          }
+        ]
+      }
+    }
+  },
   "zoomed_padding": true,
   "agent_buffer_font_size": 15.0,
   "agent": {
@@ -47,7 +68,7 @@
   },
   "theme": {
     "mode": "dark",
-    "light": "One Light",
-    "dark": "One Dark",
+    "light": "Catppuccin Latte",
+    "dark": "Catppuccin Frappé",
   },
 }

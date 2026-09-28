@@ -32,31 +32,19 @@ vim.opt.rtp:prepend(lazypath)
 -- Plugins
 require("lazy").setup({
 
-  -- Colorscheme (Flexoki, follows system dark/light setting)
+  -- Colorscheme (Catppuccin, follows system dark/light setting)
   {
-    "kepano/flexoki-neovim",
-    name = "flexoki",
+    "catppuccin/nvim",
+    name = "catppuccin",
     lazy = false,
     priority = 1000,
     config = function()
-      -- Follow Ghostty's background-opacity: when the terminal window is
-      -- translucent, let Flexoki keep nvim backgrounds transparent too.
-      local ghostty_config = vim.fn.expand("~/.config/ghostty/config")
-      local ghostty_opacity = 1
-      if vim.fn.filereadable(ghostty_config) == 1 then
-        for _, line in ipairs(vim.fn.readfile(ghostty_config)) do
-          local value = line:match("^%s*background%-opacity%s*=%s*([%d%.]+)%s*$")
-          if value then
-            ghostty_opacity = tonumber(value) or ghostty_opacity
-          end
-        end
-      end
-
-      require("flexoki").setup({
-        styles = { transparency = ghostty_opacity < 1 },
-      })
-      -- Default until auto-dark-mode applies the system setting
-      vim.cmd("colorscheme flexoki-moon")
+      require("catppuccin").setup({})
+      -- Pick the right flavor immediately at startup (auto-dark-mode
+      -- below handles live switching afterwards).
+      local dark = vim.fn.system("defaults read -g AppleInterfaceStyle 2>/dev/null"):find("Dark") ~= nil
+      vim.opt.background = dark and "dark" or "light"
+      vim.cmd("colorscheme " .. (dark and "catppuccin-frappe" or "catppuccin-latte"))
     end,
   },
   {
@@ -67,27 +55,39 @@ require("lazy").setup({
       update_interval = 3000,
       set_dark_mode = function()
         vim.opt.background = "dark"
-        vim.cmd("colorscheme flexoki-moon")
+        vim.cmd("colorscheme catppuccin-frappe")
       end,
       set_light_mode = function()
         vim.opt.background = "light"
-        vim.cmd("colorscheme flexoki-dawn")
+        vim.cmd("colorscheme catppuccin-latte")
       end,
     },
   },
-  -- Treesitter for syntax highlighting
+  -- Treesitter for syntax highlighting (main branch, requires Neovim 0.12+)
   {
     "nvim-treesitter/nvim-treesitter",
+    branch = "main",
+    lazy = false, -- the main branch does not support lazy-loading
     build = ":TSUpdate",
     config = function()
-      require("nvim-treesitter.configs").setup({ ensure_installed = { "typescript", "markdown", "python", "ruby", "html", "xml", "css", "lua"
-        },
-        highlight = {
-          enable = true,
-        },
-        indent = {
-          enable = true,
-        },
+      require("nvim-treesitter").setup({})
+
+      -- Most common software development file types
+      require("nvim-treesitter").install({
+        "bash", "c", "cpp", "css", "diff", "dockerfile", "gitcommit", "gitignore",
+        "go", "graphql", "html", "ini", "java", "javascript", "json",
+        "kotlin", "lua", "make", "markdown", "markdown_inline", "python", "regex",
+        "ruby", "rust", "scss", "sql", "swift", "toml", "tsx", "typescript",
+        "vim", "vimdoc", "xml", "yaml",
+      })
+
+      -- On this branch highlighting is not enabled automatically: start the
+      -- treesitter highlighter for every buffer whose parser is available.
+      vim.api.nvim_create_autocmd("FileType", {
+        pattern = "*",
+        callback = function(args)
+          pcall(vim.treesitter.start, args.buf)
+        end,
       })
     end,
   },

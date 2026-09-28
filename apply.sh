@@ -5,17 +5,14 @@ DOTFILES_DIR="$(cd "$(dirname "$0")" && pwd)"
 
 # Destination locations
 NVIM_DIR="$HOME/.config/nvim"
-ALACRITTY_DIR="$HOME/.config/alacritty"
 TMUX_CONF="$HOME/.tmux.conf"
 ZED_DIR="$HOME/.config/zed"
 GHOSTTY_DIR="$HOME/.config/ghostty"
-HERDR_DIR="$HOME/.config/herdr"
-FIREFOX_CHROME_DIR="$HOME/Library/Application Support/Firefox/Profiles/8hvurr5f.default-release-1717767901382/chrome"
 
 usage() {
   echo "Usage: $0 [app ...] | all"
   echo ""
-  echo "Apps: nvim, alacritty, tmux, zed, firefox, ghostty, herdr"
+  echo "Apps: nvim, tmux, zed, ghostty"
   echo ""
   echo "Examples:"
   echo "  $0 all"
@@ -28,16 +25,6 @@ apply_nvim() {
   mkdir -p "$NVIM_DIR"
   cp "$DOTFILES_DIR/nvim/init.lua" "$NVIM_DIR/"
   [ -f "$DOTFILES_DIR/nvim/lazy-lock.json" ] && cp "$DOTFILES_DIR/nvim/lazy-lock.json" "$NVIM_DIR/"
-}
-
-apply_alacritty() {
-  echo "  alacritty"
-  mkdir -p "$ALACRITTY_DIR"
-  for f in "$DOTFILES_DIR/alacritty/"*.toml; do
-    [ -f "$f" ] || continue
-    cp "$f" "$ALACRITTY_DIR/"
-    echo "    copied: $(basename "$f")"
-  done
 }
 
 apply_tmux() {
@@ -65,18 +52,6 @@ apply_ghostty() {
   [ -f "$DOTFILES_DIR/ghostty/config" ] && cp "$DOTFILES_DIR/ghostty/config" "$GHOSTTY_DIR/config"
 }
 
-apply_herdr() {
-  echo "  herdr"
-  mkdir -p "$HERDR_DIR"
-  [ -f "$DOTFILES_DIR/herdr/config.toml" ] && cp "$DOTFILES_DIR/herdr/config.toml" "$HERDR_DIR/config.toml"
-}
-
-apply_firefox() {
-  echo "  firefox"
-  mkdir -p "$FIREFOX_CHROME_DIR"
-  cp "$DOTFILES_DIR/firefox/userChrome.css" "$FIREFOX_CHROME_DIR/userChrome.css"
-}
-
 if [ $# -eq 0 ]; then
   usage
 fi
@@ -87,20 +62,14 @@ for arg in "$@"; do
   case "$arg" in
     all)
       apply_nvim
-      apply_alacritty
       apply_tmux
       apply_zed
       apply_ghostty
-      apply_herdr
-      apply_firefox
       ;;
     nvim)       apply_nvim ;;
-    alacritty)  apply_alacritty ;;
     tmux)       apply_tmux ;;
     zed)        apply_zed ;;
     ghostty)    apply_ghostty ;;
-    herdr)      apply_herdr ;;
-    firefox)    apply_firefox ;;
     *)
       echo "Unknown app: $arg"
       usage
